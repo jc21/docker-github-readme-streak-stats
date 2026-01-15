@@ -11,7 +11,7 @@ pipeline {
 		ansiColor('xterm')
 	}
 	environment {
-		IMAGE = "github-readme-streak-stats:latest"
+		IMAGE = "github-readme-streak-stats"
 	}
 	stages {
 		stage('Build') {
