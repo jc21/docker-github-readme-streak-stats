@@ -33,9 +33,11 @@ COPY --from=composer /composer /usr/bin/composer
 WORKDIR /var/www/html
 
 # Copy composer files and install dependencies
-RUN cp /workspace/github-readme-streak-stats-main/composer.json /workspace/github-readme-streak-stats-main/composer.lock ./ \
-	&& cp -prv /workspace/github-readme-streak-stats-main/src ./ \
-	&& composer install --no-dev --optimize-autoloader --no-scripts
+RUN mv /workspace/github-readme-streak-stats-main/composer.json /workspace/github-readme-streak-stats-main/composer.lock ./ \
+	&& mv /workspace/github-readme-streak-stats-main/src ./ \
+	&& rm -rf /workspace \
+	&& composer install --no-dev --optimize-autoloader --no-scripts \
+	&& composer clear-cache
 
 # Configure Apache to serve from src/ directory and pass environment variables
 RUN a2enmod rewrite headers && \
