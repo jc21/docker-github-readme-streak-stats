@@ -41,7 +41,7 @@ RUN mv /workspace/github-readme-streak-stats-main/composer.json /workspace/githu
 
 # Configure Apache to serve from src/ directory and pass environment variables
 RUN a2enmod rewrite headers && \
-	echo 'ServerTokens Prod\n\
+	echo "ServerTokens Prod\n\
 ServerSignature Off\n\
 PassEnv TOKEN\n\
 PassEnv WHITELIST\n\
@@ -58,9 +58,9 @@ PassEnv WHITELIST\n\
 		Header always set Referrer-Policy "no-referrer-when-downgrade"\n\
 		Header always set X-Content-Type-Options "nosniff"\n\
 	</Directory>\n\
-	ErrorLog ${APACHE_LOG_DIR}/error.log\n\
-	CustomLog ${APACHE_LOG_DIR}/access.log combined\n\
-</VirtualHost>' > /etc/apache2/sites-available/000-default.conf
+	ErrorLog ${APACHE_LOG_DIR:-/var/log}/error.log\n\
+	CustomLog ${APACHE_LOG_DIR:-/var/log}/access.log combined\n\
+</VirtualHost>" > /etc/apache2/sites-available/000-default.conf
 
 # Set secure permissions
 RUN chown -R www-data:www-data /var/www/html && \
