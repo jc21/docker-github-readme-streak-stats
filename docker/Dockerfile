@@ -39,27 +39,8 @@ RUN mv /workspace/github-readme-streak-stats-main/composer.json /workspace/githu
 	&& composer clear-cache
 
 # Configure Apache to serve from src/ directory and pass environment variables
-RUN a2enmod rewrite headers && \
-	echo -e "ServerTokens Prod \n\
-ServerSignature Off \n\
-PassEnv TOKEN \n\
-PassEnv WHITELIST \n\
-<VirtualHost *:80> \n\
-	ServerAdmin webmaster@localhost \n\
-	DocumentRoot /var/www/html/src \n\
-	<Directory /var/www/html/src> \n\
-		Options -Indexes \n\
-		AllowOverride None \n\
-		Require all granted \n\
-		Header always set Access-Control-Allow-Origin \"*\" \n\
-		Header always set Content-Type \"image/svg+xml\" \"expr=%{REQUEST_URI} =~ m#\\.svg$#i\" \n\
-		Header always set Content-Security-Policy \"default-src 'none'; style-src 'unsafe-inline'; img-src data:;\" \"expr=%{REQUEST_URI} =~ m#\\.svg$#i\" \n\
-		Header always set Referrer-Policy \"no-referrer-when-downgrade\" \n\
-		Header always set X-Content-Type-Options \"nosniff\" \n\
-	</Directory> \n\
-	ErrorLog ${APACHE_LOG_DIR}/error.log \n\
-	CustomLog ${APACHE_LOG_DIR}/access.log combined \n\
-</VirtualHost>\n" > /etc/apache2/sites-available/000-default.conf
+RUN a2enmod rewrite headers
+COPY docker/rootfs /
 
 # Set secure permissions
 RUN chown -R www-data:www-data /var/www/html && \
